@@ -1,0 +1,42 @@
+{
+  "name": "gulp-project",
+  "version": "0.0.1",
+  "description": "嘿快项目开发部署工具 to gulp",
+  "main": "index.js",
+  "scripts": {
+    "dev": "babel -d lib/ src/ --presets es2015-node6,stage-3 --plugins add-module-exports -w",
+    "release": "babel -d lib/ src/ --presets es2015-node6,stage-3 --plugins add-module-exports"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.coding.net/cstyles/gulp-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cbml": "^0.2.9",
+    "cheerio": "^0.22.0",
+    "clean-css": "^3.4.19",
+    "css": "^2.2.1",
+    "del": "^2.2.2",
+    "ftp": "^0.3.10",
+    "gulp-util": "^3.0.7",
+    "mime": "^1.3.4",
+    "minimatch": "^3.0.3",
+    "node-sass": "^3.10.0",
+    "request": "^2.74.0",
+    "rollup": "^0.34.13",
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-vue": "^2.2.3",
+    "spritesmith": "^3.1.0",
+    "through2": "^2.0.1",
+    "tinify": "^1.3.0",
+    "uglify-js": "^2.7.0"
+  },
+  "devDependencies": {
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015-node6": "^0.3.0",
+    "babel-preset-stage-3": "^6.11.0"
+  }
+}
