@@ -46,7 +46,8 @@ export default function (options, clean) {
         nodeResolve: {},
         vue: {
             inline: true,
-            load: 'loadCSS'
+            load: 'loadCSS',
+            compileTemplate: false
         },
         babel: {
             presets: ['es2015-loose-rollup']
@@ -60,6 +61,7 @@ export default function (options, clean) {
     var plugins = [
         nodeResolve(options.nodeResolve),
         vue({
+            compileTemplate: options.vue && options.vue.compileTemplate ? true : false,
             css: options.vue ? function (styleText, styleNode) {
                 if (styleText) {
                     cssCode = '';
@@ -132,7 +134,8 @@ export default function (options, clean) {
                     if (options.vue && cssCode) {
                         if (options.vue.inline) {
                             code = `${options.vue.load}(${JSON.stringify(cssCode).replace(/\\n/g, '')});\n${code}`; //追加code
-                        } else {let cssPath = pth.join(pth.dirname(file.path), pth.parse(file.path).name + '.css');
+                        } else {
+                            let cssPath = pth.join(pth.dirname(file.path), pth.parse(file.path).name + '.css');
 
                             //rename处理
                             if (options.rename) cssPath = rename(cssPath, options.rename);
