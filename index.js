@@ -1,4 +1,4 @@
-module.exports.ignore = require('./lib/ignore');
+module.exports.filter = require('./lib/filter');
 module.exports.rollup = require('./lib/rollup');
 module.exports.compile = require('./lib/compile');
 module.exports.sprite = require('./lib/sprite');

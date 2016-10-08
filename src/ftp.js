@@ -132,7 +132,7 @@ export default function (options) {
         callback(null, file);
     }, function (callback) {
         to(files, options).then(callback).catch((err) => {
-            this.emit('error', err);
+            console.log(err);
             callback();
         });
     });

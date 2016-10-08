@@ -2,7 +2,7 @@ import through from 'through2';
 import minimatch from "minimatch";
 
 export default function (ignore, clean = false) {
-    if (!/string|undefined/.test(typeof condition) && !Array.isArray(condition)) {
+    if (!/string|undefined/.test(typeof ignore) && !Array.isArray(ignore)) {
         throw new Error('Invalid ignore condition');
     }
 
@@ -18,7 +18,7 @@ export default function (ignore, clean = false) {
         'fis-conf.js'
     ];
 
-    if (typeof condition !== "undefined") {
+    if (typeof ignore !== "undefined") {
         if (typeof ignore === "string") ignore = [ignore];
         exclude = clean ? ignore : exclude.concat(ignore);
     }

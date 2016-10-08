@@ -66,9 +66,11 @@ export default function (options, tokens, compress = false) {
         }
 
         if (file.isBuffer()) {
-            log('Compile', colors.blue(file.path));
+            let startTime = Date.now();
             file.files = []; //用来存储副文件
             compile(file).then((file)=> {
+                log('Compile', colors.blue(file.path), 'after', colors.magenta(utils.formatTimeUnit(Date.now() - startTime))); //打印编译信息
+
                 for (let f of file.files) {
                     this.push(f); //添加副文件
                 }
@@ -81,5 +83,8 @@ export default function (options, tokens, compress = false) {
         } else {
             callback(null, file);
         }
+    }, function (callback) {
+        log('Compile', colors.green('done'));
+        callback();
     });
 }
