@@ -455,13 +455,13 @@ async function styleProcessor(path, contents) {
 }
 
 /**
- * html处理 压缩内联css和js 资源定位
+ * html处理 压缩内联css和js 资源定位 删除注释和多余的换行符
  * @param {String} path 文件地址
  * @param {String} contents 文件内容
  * @returns {String} 处理后的文件内容
  */
 async function htmlProcessor(path, contents) {
-    return await eachHtml(contents, 'link,script,a,iframe,img,embed,audio,video,object,source,style', async function (el, tag) {
+    contents =  await eachHtml(contents, 'link,script,a,iframe,img,embed,audio,video,object,source,style', async function (el, tag) {
         if (tag === 'style') {
             el.text(new CleanCSS().minify(el.html()).styles); //压缩style元素
         } else if (tag === 'script' && el.attr('src') === undefined && /^(undefined|text\/javascript)$/.test(el.attr('type'))) {
@@ -476,6 +476,7 @@ async function htmlProcessor(path, contents) {
             }
         }
     });
+    return contents.replace(/<!-[\s\S]*?-->/g, '').replace(/\n\s{1,}\n/g, '\n'); //删除html注释和多余的换行符
 }
 
 export async function html(file) {
