@@ -109,7 +109,7 @@ exports.default = function (options, clean) {
                     if (options.rename) file.path = (0, _rename2.default)(file.path, options.rename);
 
                     //.vue to .js
-                    if (/^\.vue$/.test(_path2.default.extname(file.path))) file.path = _path2.default.join(_path2.default.dirname(file.path), _path2.default.parse(file.path).name + '.js');
+                    if (/^\.vue$/.test(_path2.default.extname(file.path))) file.path = (0, _gulpUtil.replaceExtension)(file.path, '.js');
 
                     //处理.vue的css code
                     if ((typeof options.vue.css === 'Object' || options.vue.css === true) && cssCode) {

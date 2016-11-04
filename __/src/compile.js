@@ -47,14 +47,29 @@ export default function (options, tokens, compress = false) {
     //是否使用tinify压缩
     process.env.COMPRESS = compress ? '1' : '';
 
+    function _unrelative(obj) {
+        let o = {};
+        if (obj instanceof Object) {
+            for (let key in obj) {
+                o[utils.unrelative(options.cwd, key)] = obj[key];
+            }
+        }
+        return o;
+    }
+
 
     //编译选项
-    process.env.COMPILE = JSON.stringify(Object.assign({
+    options = Object.assign({
         cwd: process.cwd(),
-        www: '',
-        hash: true,
-        env: 0
-    }, options));
+        relative: true,
+        hash: false,
+        env: 0,
+        release: null,
+        url: null
+    }, options);
+    options.release = _unrelative(options.release);
+    options.url = _unrelative(options.url);
+    process.env.COMPILE = JSON.stringify(options);
 
     return through.obj(function (file, encoding, callback) {
         if (file.isNull()) {
@@ -69,7 +84,7 @@ export default function (options, tokens, compress = false) {
             let startTime = Date.now();
             file.files = []; //用来存储副文件
             compile(file).then((file)=> {
-                log('Compile', colors.blue(file.path), 'after', colors.magenta(utils.formatTimeUnit(Date.now() - startTime))); //打印编译信息
+                // log('Compile', colors.blue(file.path), 'after', colors.magenta(utils.formatTimeUnit(Date.now() - startTime))); //打印编译信息
 
                 for (let f of file.files) {
                     this.push(f); //添加副文件

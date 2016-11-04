@@ -5,6 +5,7 @@ import CSS from 'css';
 import CleanCSS from 'clean-css';
 import {minify} from 'uglify-js';
 import cbml from 'cbml';
+import minimatch from "minimatch";
 import utils from './utils';
 
 //脚本嵌入资源方法匹配正则
@@ -165,13 +166,31 @@ function inlineScriptResLocate(path, inlinePath, inlineContent) {
 async function uri(path, mainPath, absolute = false) {
     let options = JSON.parse(process.env.COMPILE),
         info = utils.query(path),
-        md5 = utils.md5(await utils.read(info.rest));
+        md5 = utils.md5(await utils.read(info.rest)),
+        _path = '';
 
-    if (options.www.trim() === '' && !absolute) {
-        path = pth.relative(pth.dirname(mainPath), info.rest);
-    } else {
-        path = pth.relative(options.cwd, info.rest); //相对地址
-        path = pth.join(options.www || '/', path); //绝对地址
+    if (options.url instanceof Object) {
+        for (let key in options.url) {
+            let urlPattern = options.url[key];
+            urlPattern = !/^\//.test(urlPattern) && !/^(http:|https:|ftp:)?\/\/.*/.test(urlPattern) ? '/' + urlPattern : urlPattern;
+            if (/\$[01]$/.test(urlPattern) && minimatch(path, key, {matchBase: true})) {
+                _path = pth.join('/', pth.relative(options.cwd, info.rest));
+                if (/\$0$/.test(urlPattern)) _path = pth.join(urlPattern.replace('$0', ''), _path);
+                if (/\$1$/.test(urlPattern)) _path = pth.join(urlPattern.replace('$1', ''), pth.parse(_path).base);
+                if (pth.isAbsolute(_path)) {
+                    path = pth.join(options.cwd, _path);
+                } else {
+                    path = _path;
+                }
+            }
+        }
+    }
+    if (pth.isAbsolute(path)) {
+        if (options.relative && !absolute) {
+            path = pth.relative(pth.dirname(mainPath), info.rest);
+        } else {
+            path = _path || pth.join('/', pth.relative(options.cwd, info.rest)); //绝对地址
+        }
     }
 
     let pathInfo = pth.parse(path);
@@ -219,7 +238,7 @@ function concat(mainPath, paths) {
 
     path = path.substring(0, path.length - 1).replace(/\\/g, '/');
 
-    return options.www ? pth.resolve(options.cwd, path) : pth.relative(pth.dirname(mainPath), path);
+    return options.relative ? pth.relative(pth.dirname(mainPath), path) : pth.resolve(options.cwd, path);
 }
 
 /**
@@ -461,7 +480,7 @@ async function styleProcessor(path, contents) {
  * @returns {String} 处理后的文件内容
  */
 async function htmlProcessor(path, contents) {
-    contents =  await eachHtml(contents, 'link,script,a,iframe,img,embed,audio,video,object,source,style', async function (el, tag) {
+    contents = await eachHtml(contents, 'link,script,a,iframe,img,embed,audio,video,object,source,style', async function (el, tag) {
         if (tag === 'style') {
             el.text(new CleanCSS().minify(el.html()).styles); //压缩style元素
         } else if (tag === 'script' && el.attr('src') === undefined && /^(undefined|text\/javascript)$/.test(el.attr('type'))) {

@@ -1,1 +1,1 @@
-#https://github.com/Ensighten/spritesmith
+#适用mac

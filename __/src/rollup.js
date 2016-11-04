@@ -7,7 +7,7 @@ import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import sass from 'node-sass';
 import css from 'css';
-import {File} from 'gulp-util';
+import {File, replaceExtension} from 'gulp-util';
 import utils from './modules/utils';
 import rename from './modules/rename';
 
@@ -145,7 +145,7 @@ export default function (options, clean) {
                     if (options.rename) file.path = rename(file.path, options.rename);
 
                     //.vue to .js
-                    if (/^\.vue$/.test(pth.extname(file.path))) file.path = pth.join(pth.dirname(file.path), pth.parse(file.path).name + '.js');
+                    if (/^\.vue$/.test(pth.extname(file.path))) file.path = replaceExtension(file.path, '.js');
 
                     //处理.vue的css code
                     if ((typeof options.vue.css === 'Object' || options.vue.css === true) && cssCode) {
