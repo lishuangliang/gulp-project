@@ -1,6 +1,6 @@
 {
   "name": "gulp-project",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "嘿快项目开发部署工具 to gulp",
   "main": "index.js",
   "scripts": {},
@@ -18,10 +18,12 @@
     "cbml": "^0.2.9",
     "cheerio": "^0.22.0",
     "clean-css": "^3.4.19",
+    "consistent-path": "^2.0.3",
     "css": "^2.2.1",
     "del": "^2.2.2",
     "ftp": "^0.3.10",
     "gulp-util": "^3.0.7",
+    "html-minifier": "^3.1.1",
     "js-beautify": "^1.6.4",
     "mime": "^1.3.4",
     "minimatch": "^3.0.3",
@@ -33,9 +35,6 @@
     "spritesmith": "^3.1.0",
     "through2": "^2.0.1",
     "tinify": "^1.3.0",
-    "uglify-js": "^2.7.0"
-  },
-  "devDependencies": {
-    "html-minifier": "^3.1.0"
+    "uglify-js": "^2.7.4"
   }
 }
