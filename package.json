@@ -1,6 +1,6 @@
 {
   "name": "gulp-project",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "嘿快项目开发部署工具 to gulp",
   "main": "index.js",
   "scripts": {},
